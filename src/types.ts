@@ -52,6 +52,14 @@ export interface Score {
     home: number | null;
     away: number | null;
   };
+  extraTime?: {           // опционально, для платного API
+    home: number | null;
+    away: number | null;
+  };
+  penalties?: {           // опционально, для платного API
+    home: number | null;
+    away: number | null;
+  };
 }
 
 // ========== МАТЧ ==========

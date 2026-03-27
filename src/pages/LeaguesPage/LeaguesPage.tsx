@@ -47,8 +47,8 @@ const LeaguesPage = () => {
     fetchLeagues();
   }, []);
 
-  const handleCardClick = (id: number) => {
-    navigate(`/leagues/${id}/matches`);
+  const handleCardClick = (id: number, name: string) => {
+    navigate(`/matches/league/${id}`, { state: { leagueName: name } });
   };
 
   if (loading) {
@@ -105,7 +105,7 @@ const LeaguesPage = () => {
                 name={league.name}
                 imageUrl={league.emblem}
                 country={league.area?.name}
-                onClick={handleCardClick}
+                onClick={() => handleCardClick(league.id, league.name)}
               />
             ))}
           </div>

@@ -1,0 +1,50 @@
+/* src/components/DateRangeFilter/DateRangeFilter.module.css */
+
+.filterContainer {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.filterRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dateField label {
+  font-size: 0.75rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.dateField input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: white;
+  min-width: 160px;
+}
+
+.dateField input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .filterRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .dateField input {
+    width: 100%;
+  }
+}

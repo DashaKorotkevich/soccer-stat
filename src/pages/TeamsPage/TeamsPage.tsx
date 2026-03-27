@@ -17,7 +17,6 @@ const TeamsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Получаем сколько карточек показывать (5, 7 или 9)
   const itemsPerPage = useItemsPerPage();
 
   // Получаем данные для пагинации
@@ -36,10 +35,8 @@ const TeamsPage = () => {
         setError(null);
         const data = await getTeams();
         setTeams(data);
-        console.log('Команды загружены:', data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Ошибка загрузки команд');
-        console.error('Ошибка при загрузке команд:', err);
       } finally {
         setLoading(false);
       }
