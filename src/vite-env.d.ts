@@ -5,11 +5,9 @@ declare module '*.module.css' {
   export default classes;
 }
 
-// Расширяем типы для import.meta.env
 interface ImportMetaEnv {
   readonly VITE_FOOTBALL_API_KEY: string;
   readonly VITE_FOOTBALL_API_URL: string;
-  // Vite добавляет эти переменные автоматически
   readonly DEV: boolean;
   readonly PROD: boolean;
   readonly MODE: string;

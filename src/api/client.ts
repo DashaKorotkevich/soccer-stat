@@ -26,13 +26,9 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    console.log('api: ', error.response?.status);
-    console.log('api: ', error.response?.data);
     if (error.response?.status === 429) {
-      console.error('Превышен лимит запросов');
     }
     if (error.response?.status === 403) {
-      console.error('Неверный API ключ');
     }
     return Promise.reject(error);
   }
