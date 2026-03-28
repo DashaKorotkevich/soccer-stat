@@ -1,4 +1,3 @@
-// src/components/Card/Card.tsx
 import styles from './Card.module.css';
 
 interface CardProps {

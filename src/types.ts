@@ -52,11 +52,13 @@ export interface Score {
     home: number | null;
     away: number | null;
   };
-  extraTime?: {           // опционально, для платного API
+  extraTime?: {
+    // для платного API
     home: number | null;
     away: number | null;
   };
-  penalties?: {           // опционально, для платного API
+  penalties?: {
+    // для платного API
     home: number | null;
     away: number | null;
   };
@@ -88,6 +90,6 @@ export interface Team {
   founded?: number;
   clubColors?: string;
   venue?: string;
-  area?: Area;  // добавляем area, чтобы показывать страну
+  area?: Area; // добавляем area, чтобы показывать страну
   lastUpdated?: string;
 }

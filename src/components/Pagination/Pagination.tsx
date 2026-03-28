@@ -1,4 +1,3 @@
-// src/components/Pagination/Pagination.tsx
 import styles from './Pagination.module.css';
 
 interface PaginationProps {
@@ -29,18 +28,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
 
   return (
     <div className={styles.pagination}>
-      <button
-        onClick={goToPrevPage}
-        disabled={currentPage === 1}
-        className={styles.button}
-      >
+      <button onClick={goToPrevPage} disabled={currentPage === 1} className={styles.button}>
         ← Назад
       </button>
-      
+
       <span className={styles.pageInfo}>
         Страница {currentPage} из {totalPages}
       </span>
-      
+
       <button
         onClick={goToNextPage}
         disabled={currentPage === totalPages}

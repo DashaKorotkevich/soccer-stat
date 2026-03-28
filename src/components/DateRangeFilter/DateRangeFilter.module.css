@@ -1,5 +1,3 @@
-/* src/components/DateRangeFilter/DateRangeFilter.module.css */
-
 .filterContainer {
   margin-bottom: 1rem;
   margin-top: 1rem;
@@ -43,7 +41,7 @@
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .dateField input {
     width: 100%;
   }

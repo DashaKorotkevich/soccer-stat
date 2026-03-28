@@ -1,4 +1,3 @@
-// src/pages/LeaguesPage.tsx
 import styles from './LeaguesPage.module.css';
 import { Card } from '@components/Card/Card';
 import Pagination from '@components/Pagination/Pagination';
@@ -17,17 +16,11 @@ const LeaguesPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Получаем сколько карточек показывать (5, 7 или 9)
-  const itemsPerPage = useItemsPerPage();
+  const itemsPerPage = useItemsPerPage('CARDS');
 
   // Получаем данные для пагинации
-  const {
-    currentPage,
-    totalPages,
-    currentItems,
-    setCurrentPage,
-    totalItems
-  } = usePagination(leagues, itemsPerPage, searchQuery);
+  const { currentPage, totalPages, currentItems, setCurrentPage, totalItems } =
+    usePagination<League>(leagues, itemsPerPage, searchQuery);
 
   useEffect(() => {
     const fetchLeagues = async () => {
@@ -38,7 +31,6 @@ const LeaguesPage = () => {
         setLeagues(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Ошибка загрузки лиг');
-        console.error('Ошибка при загрузке лиг:', err);
       } finally {
         setLoading(false);
       }
@@ -66,7 +58,6 @@ const LeaguesPage = () => {
       <div className="container">
         <div className={styles.error}>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Попробовать снова</button>
         </div>
       </div>
     );
@@ -79,21 +70,13 @@ const LeaguesPage = () => {
         onChange={setSearchQuery}
         placeholder="Поиск по названию или стране"
       />
-    
-      {searchQuery && (
-        <div className={styles.searchInfo}>
-          Найдено: {totalItems} лиг
-        </div>
-      )}
+
+      {searchQuery && <div className={styles.searchInfo}>Найдено: {totalItems} лиг</div>}
 
       {currentItems.length === 0 ? (
         <div className={styles.empty}>
           <p>Лиги не найдены</p>
-          {searchQuery && (
-            <button onClick={() => setSearchQuery('')}>
-              Очистить поиск
-            </button>
-          )}
+          {searchQuery && <button onClick={() => setSearchQuery('')}>Очистить поиск</button>}
         </div>
       ) : (
         <>

@@ -16,7 +16,10 @@ export const Header = () => {
           <Link to="/" className={`${styles.navLink} ${isActive('/') ? styles.active : ''}`}>
             Лиги
           </Link>
-          <Link to="/teams" className={`${styles.navLink} ${isActive('/teams') ? styles.active : ''}`}>
+          <Link
+            to="/teams"
+            className={`${styles.navLink} ${isActive('/teams') ? styles.active : ''}`}
+          >
             Команды
           </Link>
         </nav>

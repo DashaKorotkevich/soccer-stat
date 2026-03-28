@@ -1,4 +1,3 @@
-// src/components/SearchInput/SearchInput.tsx
 import styles from './SearchInput.module.css';
 
 interface SearchInputProps {
@@ -18,10 +17,7 @@ const SearchInput = ({ value, onChange, placeholder = 'Поиск...' }: SearchI
         onChange={(e) => onChange(e.target.value)}
       />
       {value && (
-        <button
-          className={styles.clearButton}
-          onClick={() => onChange('')}
-        >
+        <button className={styles.clearButton} onClick={() => onChange('')}>
           ✕
         </button>
       )}

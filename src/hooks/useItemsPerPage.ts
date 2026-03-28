@@ -1,32 +1,30 @@
-// src/hooks/useItemsPerPage.ts
 import { useState, useEffect } from 'react';
 
-interface ItemsPerPageConfig {
-  mobile: number;    // < 768px
-  tablet: number;    // 768px - 1024px
-  desktop: number;   // > 1024px
-}
+export const PAGINATION_PRESETS = {
+  CARDS: { mobile: 4, tablet: 8, desktop: 9 },
+  LIST: { mobile: 10, tablet: 15, desktop: 20 },
+} as const;
 
-const DEFAULT_CONFIG: ItemsPerPageConfig = {
-  mobile: 4,
-  tablet: 8,
-  desktop: 9
-};
+export type PaginationPreset = keyof typeof PAGINATION_PRESETS;
 
-export const useItemsPerPage = (config: ItemsPerPageConfig = DEFAULT_CONFIG) => {
-  const [itemsPerPage, setItemsPerPage] = useState(config.desktop);
+export const useItemsPerPage = (preset: PaginationPreset = 'CARDS') => {
+  const config = PAGINATION_PRESETS[preset];
+  const [itemsPerPage, setItemsPerPage] = useState<number>(config.desktop);
 
   useEffect(() => {
     const updateItemsPerPage = () => {
       const width = window.innerWidth;
-      
+
+      let newValue: number;
       if (width < 768) {
-        setItemsPerPage(config.mobile);
+        newValue = config.mobile;
       } else if (width < 1024) {
-        setItemsPerPage(config.tablet);
+        newValue = config.tablet;
       } else {
-        setItemsPerPage(config.desktop);
+        newValue = config.desktop;
       }
+
+      setItemsPerPage(newValue);
     };
 
     updateItemsPerPage();

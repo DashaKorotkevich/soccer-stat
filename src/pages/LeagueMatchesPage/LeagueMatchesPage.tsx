@@ -1,4 +1,3 @@
-// src/pages/LeagueMatchesPage/LeagueMatchesPage.tsx
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getLeagueMatches, getLeagueMatchesWithDates } from '@api/matchesLeague';
@@ -18,33 +17,26 @@ const LeagueMatchesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const itemsPerPage = useItemsPerPage({
-    mobile: 10,
-    tablet: 15,
-    desktop: 20
-  });
+  const itemsPerPage = useItemsPerPage('LIST');
 
-  const {
-    currentPage,
-    totalPages,
-    currentItems,
-    setCurrentPage,
-    totalItems
-  } = usePagination(allMatches, itemsPerPage, '');
+  const { currentPage, totalPages, currentItems, setCurrentPage } = usePagination(
+    allMatches,
+    itemsPerPage,
+    ''
+  );
 
   const fetchMatches = async (dateFrom?: string, dateTo?: string) => {
-    
     try {
       setLoading(true);
       setError(null);
-      
+
       let data;
       if (dateFrom && dateTo) {
         data = await getLeagueMatchesWithDates(Number(leagueId), dateFrom, dateTo);
       } else {
         data = await getLeagueMatches(Number(leagueId));
       }
-      
+
       setAllMatches(data);
       setCurrentPage(1);
     } catch (err) {
@@ -84,41 +76,32 @@ const LeagueMatchesPage = () => {
   if (error) {
     return (
       <div className="container">
-        <div className={styles.error}>
-          <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Попробовать снова</button>
-        </div>
+        <div className={styles.error}>{error}</div>
       </div>
     );
   }
 
   return (
     <div className="container">
-      <div className={styles.breadcrumbs}>
-        <Link to="/" className={styles.breadcrumbLink}>Лиги</Link>
-        <span className={styles.breadcrumbCurrent}>{` > ${leagueName}`}</span>
+      <div>
+        <Link to="/" className={styles.breadcrumbLink}>
+          Лиги
+        </Link>
+        <span className={styles.breadcrumbSeparator}>›</span>
+        <span className={styles.breadcrumbCurrent}>{leagueName}</span>
       </div>
-      
-      <DateRangeFilter 
-        onFilter={handleFilter}
-        onClear={handleClearFilter}
-      />
-      
+
+      <DateRangeFilter onFilter={handleFilter} onClear={handleClearFilter} />
+
       <div className={styles.matchesList}>
         {currentItems.length === 0 ? (
           <div className={styles.empty}>Матчей не найдено</div>
         ) : (
-          currentItems.map((match) => (
-            <MatchRow key={match.id} match={match} />
-          ))
+          currentItems.map((match) => <MatchRow key={match.id} match={match} />)
         )}
       </div>
-      
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </div>
   );
 };

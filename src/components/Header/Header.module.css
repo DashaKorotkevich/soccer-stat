@@ -3,18 +3,18 @@
 }
 
 .headerContainer {
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  height: 3rem;
+  padding: 0 2rem;
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 1.5rem;
-  padding: 0 2rem;
+  height: 3rem;
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--accent);
   text-decoration: none;
@@ -22,13 +22,7 @@
 }
 
 .logo:hover {
-  opacity: 0.9; /* прозрачность */
-}
-
-@media (min-width: 768px) {
-  .logo {
-    font-size: 1.75rem;
-  }
+  opacity: 0.9;
 }
 
 .nav {
@@ -60,14 +54,50 @@
 }
 
 .active {
-  color: var(--text);
+  color: var(--accent);
 }
 
 .active::after {
   background-color: var(--accent);
 }
 
+/* Планшет портрет (820px) */
+@media (min-width: 820px) {
+  .headerContainer {
+    max-width: 820px;
+    padding: 0 1rem;
+  }
+}
+
+/* Планшет ландшафт (1180px) */
+@media (min-width: 1180px) and (orientation: landscape) {
+  .headerContainer {
+    max-width: 1100px;
+    padding: 0 2rem;
+  }
+}
+
+/* Маленький десктоп (1280px) */
+@media (min-width: 1280px) {
+  .headerContainer {
+    max-width: 1200px;
+    padding: 0 2rem;
+  }
+}
+
+/* Большой десктоп (1920px) */
+@media (min-width: 1920px) {
+  .headerContainer {
+    max-width: 1400px;
+    padding: 0 2.5rem;
+  }
+}
+
 @media (min-width: 768px) {
+  .logo {
+    font-size: 1.75rem;
+  }
+
   .navLink {
     font-size: 1.125rem;
   }

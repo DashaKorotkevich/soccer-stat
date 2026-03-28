@@ -10,12 +10,12 @@ export async function getLeagueMatches(leagueId: number): Promise<Match[]> {
 
 // Получить матчи лиги с фильтром по датам
 export async function getLeagueMatchesWithDates(
-  leagueId: number, 
-  dateFrom: string, 
+  leagueId: number,
+  dateFrom: string,
   dateTo: string
 ): Promise<Match[]> {
   const response = await apiClient.get(`/competitions/${leagueId}/matches`, {
-    params: { dateFrom, dateTo }
+    params: { dateFrom, dateTo },
   });
   return response.data.matches || [];
 }

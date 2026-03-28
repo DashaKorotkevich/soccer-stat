@@ -1,4 +1,3 @@
-// src/pages/TeamsPage.tsx
 import styles from './TeamsPage.module.css';
 import { Card } from '@components/Card/Card';
 import Pagination from '@components/Pagination/Pagination';
@@ -17,16 +16,13 @@ const TeamsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const itemsPerPage = useItemsPerPage();
+  const itemsPerPage = useItemsPerPage('CARDS');
 
-  // Получаем данные для пагинации
-  const {
-    currentPage,
-    totalPages,
-    currentItems,
-    setCurrentPage,
-    totalItems
-  } = usePagination(teams, itemsPerPage, searchQuery);
+  const { currentPage, totalPages, currentItems, setCurrentPage, totalItems } = usePagination(
+    teams,
+    itemsPerPage,
+    searchQuery
+  );
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -45,8 +41,8 @@ const TeamsPage = () => {
     fetchTeams();
   }, []);
 
-  const handleCardClick = (id: number) => {
-    navigate(`/teams/${id}/matches`);
+  const handleCardClick = (id: number, name: string) => {
+    navigate(`/matches/team/${id}`, { state: { teamName: name } });
   };
 
   if (loading) {
@@ -64,7 +60,6 @@ const TeamsPage = () => {
       <div className="container">
         <div className={styles.error}>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Попробовать снова</button>
         </div>
       </div>
     );
@@ -77,21 +72,13 @@ const TeamsPage = () => {
         onChange={setSearchQuery}
         placeholder="Поиск команд по названию..."
       />
-    
-      {searchQuery && (
-        <div className={styles.searchInfo}>
-          Найдено: {totalItems} команд
-        </div>
-      )}
+
+      {searchQuery && <div className={styles.searchInfo}>Найдено: {totalItems} команд</div>}
 
       {currentItems.length === 0 ? (
         <div className={styles.empty}>
           <p>Команды не найдены</p>
-          {searchQuery && (
-            <button onClick={() => setSearchQuery('')}>
-              Очистить поиск
-            </button>
-          )}
+          {searchQuery && <button onClick={() => setSearchQuery('')}>Очистить поиск</button>}
         </div>
       ) : (
         <>
@@ -102,7 +89,7 @@ const TeamsPage = () => {
                 id={team.id}
                 name={team.name}
                 imageUrl={team.crest}
-                onClick={handleCardClick}
+                onClick={() => handleCardClick(team.id, team.name)}
               />
             ))}
           </div>

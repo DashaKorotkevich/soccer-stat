@@ -1,9 +1,10 @@
-// src/api/client.ts
 import axios, { AxiosError } from 'axios';
 
 // В разработке используем прокси, в продакшене - напрямую
 const isDev = import.meta.env.DEV;
-const BASE_URL = isDev ? '/api' : (import.meta.env.VITE_FOOTBALL_API_URL || 'https://api.football-data.org/v4');
+const BASE_URL = isDev
+  ? '/api'
+  : import.meta.env.VITE_FOOTBALL_API_URL || 'https://api.football-data.org/v4';
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -25,14 +26,14 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    console.log('api: ',error.response?.status);
-    console.log('api: ',error.response?.data);
+    console.log('api: ', error.response?.status);
+    console.log('api: ', error.response?.data);
     if (error.response?.status === 429) {
-        console.error('Превышен лимит запросов');
+      console.error('Превышен лимит запросов');
     }
     if (error.response?.status === 403) {
-        console.error('Неверный API ключ');
-    }   
+      console.error('Неверный API ключ');
+    }
     return Promise.reject(error);
   }
 );

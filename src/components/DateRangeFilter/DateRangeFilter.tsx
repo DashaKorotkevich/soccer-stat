@@ -1,4 +1,3 @@
-// src/components/DateRangeFilter/DateRangeFilter.tsx
 import { useState } from 'react';
 import styles from './DateRangeFilter.module.css';
 
@@ -15,7 +14,7 @@ const DateRangeFilter = ({ onFilter, onClear }: DateRangeFilterProps) => {
     const value = e.target.value;
     console.log('Date from changed:', value);
     setDateFrom(value);
-    
+
     if (value && dateTo) {
       console.log('Both dates have values, filtering...');
       onFilter(value, dateTo);
@@ -29,7 +28,7 @@ const DateRangeFilter = ({ onFilter, onClear }: DateRangeFilterProps) => {
     const value = e.target.value;
     console.log('Date to changed:', value);
     setDateTo(value);
-    
+
     if (dateFrom && value) {
       console.log('Both dates have values, filtering...');
       onFilter(dateFrom, value);
@@ -44,20 +43,12 @@ const DateRangeFilter = ({ onFilter, onClear }: DateRangeFilterProps) => {
       <div className={styles.filterRow}>
         <div className={styles.dateField}>
           <label>Дата с:</label>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={handleDateFromChange}
-          />
+          <input type="date" value={dateFrom} onChange={handleDateFromChange} />
         </div>
-        
+
         <div className={styles.dateField}>
           <label>Дата по:</label>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={handleDateToChange}
-          />
+          <input type="date" value={dateTo} onChange={handleDateToChange} />
         </div>
       </div>
     </div>
