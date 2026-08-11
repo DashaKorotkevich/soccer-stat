@@ -1,19 +1,17 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './LeaguesPage.module.css';
 import { Card } from '@components/Card/Card';
 import Pagination from '@components/Pagination/Pagination';
-import { useState, useEffect } from 'react';
-import { getLeagues } from '@api/leagues';
+import SearchInput from '@components/SearchInput/SearchInput';
 import { League } from '@/types';
 import { useItemsPerPage } from '@hooks/useItemsPerPage';
 import { usePagination } from '@hooks/usePagination';
-import SearchInput from '@components/SearchInput/SearchInput';
-import { useNavigate } from 'react-router-dom';
+import { useLeagues } from '@hooks/useLeagues';
 
 const LeaguesPage = () => {
   const navigate = useNavigate();
-  const [leagues, setLeagues] = useState<League[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: leagues = [], isLoading, isError, error } = useLeagues();
   const [searchQuery, setSearchQuery] = useState('');
 
   const itemsPerPage = useItemsPerPage('CARDS');
@@ -22,28 +20,11 @@ const LeaguesPage = () => {
   const { currentPage, totalPages, currentItems, setCurrentPage, totalItems } =
     usePagination<League>(leagues, itemsPerPage, searchQuery);
 
-  useEffect(() => {
-    const fetchLeagues = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getLeagues();
-        setLeagues(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Ошибка загрузки лиг');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLeagues();
-  }, []);
-
   const handleCardClick = (id: number, name: string) => {
     navigate(`/matches/league/${id}`, { state: { leagueName: name } });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="container">
         <div className={styles.loading}>
@@ -53,11 +34,11 @@ const LeaguesPage = () => {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="container">
         <div className={styles.error}>
-          <p>{error}</p>
+          <p>{error instanceof Error ? error.message : 'Ошибка загрузки лиг'}</p>
         </div>
       </div>
     );

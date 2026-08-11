@@ -1,71 +1,44 @@
 import { useParams, useLocation, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { getLeagueMatches, getLeagueMatchesWithDates } from '@api/matchesLeague';
+import { useState } from 'react';
 import MatchRow from '@components/MatchRow/MatchRow';
 import Pagination from '@components/Pagination/Pagination';
 import DateRangeFilter from '@components/DateRangeFilter/DateRangeFilter';
 import { useItemsPerPage } from '@hooks/useItemsPerPage';
 import { usePagination } from '@hooks/usePagination';
+import { useLeagueMatches } from '@hooks/useLeagueMatches';
 import { Match } from '@/types';
 import styles from './LeagueMatchesPage.module.css';
 
 const LeagueMatchesPage = () => {
-  const { leagueId } = useParams();
+  const { leagueId = '' } = useParams<{ leagueId: string }>();
   const location = useLocation();
-  const [leagueName, setLeagueName] = useState<string>('');
-  const [allMatches, setAllMatches] = useState<Match[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const leagueName = location.state?.leagueName || '';
+  const [dateRange, setDateRange] = useState<{ dateFrom?: string; dateTo?: string }>({});
 
+  const {
+    data: allMatches = [],
+    isLoading,
+    isError,
+    error,
+  } = useLeagueMatches(leagueId, dateRange.dateFrom, dateRange.dateTo);
   const itemsPerPage = useItemsPerPage('LIST');
-
-  const { currentPage, totalPages, currentItems, setCurrentPage } = usePagination(
+  const { currentPage, totalPages, currentItems, setCurrentPage } = usePagination<Match>(
     allMatches,
     itemsPerPage,
     ''
   );
 
-  const fetchMatches = async (dateFrom?: string, dateTo?: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      let data;
-      if (dateFrom && dateTo) {
-        data = await getLeagueMatchesWithDates(Number(leagueId), dateFrom, dateTo);
-      } else {
-        data = await getLeagueMatches(Number(leagueId));
-      }
-
-      setAllMatches(data);
-      setCurrentPage(1);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка загрузки матчей');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const name = location.state?.leagueName;
-    if (name) {
-      setLeagueName(name);
-    }
-
-    if (leagueId) {
-      fetchMatches();
-    }
-  }, [leagueId]);
-
   const handleFilter = (dateFrom: string, dateTo: string) => {
-    fetchMatches(dateFrom, dateTo);
+    setDateRange({ dateFrom, dateTo });
+    setCurrentPage(1); // Сбрасываем пагинацию на 1 страницу
   };
 
   const handleClearFilter = () => {
-    fetchMatches();
+    setDateRange({});
+    setCurrentPage(1);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="container">
         <div className={styles.loading}>Загрузка матчей...</div>
@@ -73,10 +46,12 @@ const LeagueMatchesPage = () => {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="container">
-        <div className={styles.error}>{error}</div>
+        <div className={styles.error}>
+          {error instanceof Error ? error.message : 'Ошибка загрузки матчей'}
+        </div>
       </div>
     );
   }
@@ -101,7 +76,13 @@ const LeagueMatchesPage = () => {
         )}
       </div>
 
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };

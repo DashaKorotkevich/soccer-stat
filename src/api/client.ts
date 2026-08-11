@@ -4,7 +4,6 @@ const isDev = import.meta.env.DEV;
 const API_URL = 'https://api.football-data.org/v4';
 const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY;
 
-// Для GitHub Pages используем прокси, который не удаляет заголовки
 const BASE_URL = isDev
   ? '/api'
   : `https://cors-anywhere.herokuapp.com/${API_URL}`;
@@ -17,11 +16,9 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  // Добавляем API ключ в заголовки
   if (API_KEY) {
     config.headers['X-Auth-Token'] = API_KEY;
   }
-  console.log('Request:', config.method?.toUpperCase(), config.url);
   return config;
 });
 

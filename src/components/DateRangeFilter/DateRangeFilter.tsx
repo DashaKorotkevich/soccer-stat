@@ -7,34 +7,34 @@ interface DateRangeFilterProps {
 }
 
 const DateRangeFilter = ({ onFilter, onClear }: DateRangeFilterProps) => {
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
-  const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    console.log('Date from changed:', value);
-    setDateFrom(value);
+  const handleFromDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextFromDate = event.target.value;
+    setFromDate(nextFromDate);
 
-    if (value && dateTo) {
-      console.log('Both dates have values, filtering...');
-      onFilter(value, dateTo);
-    } else if (!value && !dateTo) {
-      console.log('Both dates empty, clearing...');
+    if (!nextFromDate) {
       onClear();
+      return;
+    }
+
+    if (nextFromDate && toDate && nextFromDate <= toDate) {
+      onFilter(nextFromDate, toDate);
     }
   };
 
-  const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    console.log('Date to changed:', value);
-    setDateTo(value);
+  const handleToDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextToDate = event.target.value;
+    setToDate(nextToDate);
 
-    if (dateFrom && value) {
-      console.log('Both dates have values, filtering...');
-      onFilter(dateFrom, value);
-    } else if (!dateFrom && !value) {
-      console.log('Both dates empty, clearing...');
+    if (!nextToDate) {
       onClear();
+      return;
+    }
+
+    if (fromDate && nextToDate && fromDate <= nextToDate) {
+      onFilter(fromDate, nextToDate);
     }
   };
 
@@ -43,12 +43,12 @@ const DateRangeFilter = ({ onFilter, onClear }: DateRangeFilterProps) => {
       <div className={styles.filterRow}>
         <div className={styles.dateField}>
           <label>Дата с:</label>
-          <input type="date" value={dateFrom} onChange={handleDateFromChange} />
+          <input type="date" value={fromDate} onChange={handleFromDateChange} />
         </div>
 
         <div className={styles.dateField}>
           <label>Дата по:</label>
-          <input type="date" value={dateTo} onChange={handleDateToChange} />
+          <input type="date" value={toDate} onChange={handleToDateChange} />
         </div>
       </div>
     </div>

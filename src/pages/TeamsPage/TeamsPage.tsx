@@ -2,20 +2,16 @@ import styles from './TeamsPage.module.css';
 import { Card } from '@components/Card/Card';
 import Pagination from '@components/Pagination/Pagination';
 import SearchInput from '@components/SearchInput/SearchInput';
-import { useState, useEffect } from 'react';
-import { getTeams } from '@api/teams';
-import { Team } from '@/types';
+import { useState } from 'react';
 import { useItemsPerPage } from '@hooks/useItemsPerPage';
 import { usePagination } from '@hooks/usePagination';
+import { useTeams } from '@hooks/useTeams';
 import { useNavigate } from 'react-router-dom';
 
 const TeamsPage = () => {
   const navigate = useNavigate();
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const { data: teams = [], isLoading, isError, error } = useTeams();
   const itemsPerPage = useItemsPerPage('CARDS');
 
   const { currentPage, totalPages, currentItems, setCurrentPage, totalItems } = usePagination(
@@ -24,28 +20,11 @@ const TeamsPage = () => {
     searchQuery
   );
 
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getTeams();
-        setTeams(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Ошибка загрузки команд');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTeams();
-  }, []);
-
   const handleCardClick = (id: number, name: string) => {
     navigate(`/matches/team/${id}`, { state: { teamName: name } });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="container">
         <div className={styles.loading}>
@@ -55,11 +34,11 @@ const TeamsPage = () => {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="container">
         <div className={styles.error}>
-          <p>{error}</p>
+          <p>{error instanceof Error ? error.message : 'Ошибка загрузки команд'}</p>
         </div>
       </div>
     );

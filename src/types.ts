@@ -78,7 +78,7 @@ export interface Match {
   venue?: string;
 }
 
-// ========== КОМАНДА (полная, для списка) ==========
+// ========== КОМАНДА ==========
 export interface Team {
   id: number;
   name: string;
@@ -92,4 +92,10 @@ export interface Team {
   venue?: string;
   area?: Area; // добавляем area, чтобы показывать страну
   lastUpdated?: string;
+}
+
+// ========== ФИЛЬТРЫ ДЛЯ МАТЧЕЙ==========
+export interface MatchParams {
+  dateFrom?: string;
+  dateTo?: string;
 }

@@ -1,20 +1,13 @@
 import { apiClient } from './client';
-import { Match } from '@/types';
+import { Match, MatchParams } from '@/types';
 
-// Получить матчи конкретной команды
-export async function getTeamMatches(teamId: number): Promise<Match[]> {
-  const response = await apiClient.get(`/teams/${teamId}/matches`);
-  return response.data.matches || [];
-}
-
-// Получить матчи конкретной команды с фильтром по датам
-export async function getTeamMatchesWithDates(
-  teamId: number,
-  dateFrom: string,
-  dateTo: string
+export async function getTeamMatches(
+  teamId: number | string,
+  params?: MatchParams
 ): Promise<Match[]> {
   const response = await apiClient.get(`/teams/${teamId}/matches`, {
-    params: { dateFrom, dateTo },
+    params,
   });
+
   return response.data.matches || [];
 }
